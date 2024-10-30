@@ -72,7 +72,6 @@ func _handle_left(tpos: Vector3, cpos: Vector3, delta: float) -> void:
 	var diff_between_left_edges: float = target_left_edge - pushbox_left_edge
 	if diff_between_left_edges < 0:
 		global_position.x += diff_between_left_edges
-		print("pushbox: left")
 		return
 	
 	# Handle speedup zone: Apply push_ratio if the target is in a speedup zone
@@ -83,7 +82,6 @@ func _handle_left(tpos: Vector3, cpos: Vector3, delta: float) -> void:
 		var tspeed: float = target.velocity.length()
 		var target_unit_direction: Vector3 = target.velocity.normalized()
 		global_position.x += target_unit_direction.x * tspeed * delta * push_ratio
-		print("speedup: left")
 
 
 func _handle_right(tpos: Vector3, cpos: Vector3, delta: float) -> void:
@@ -93,7 +91,6 @@ func _handle_right(tpos: Vector3, cpos: Vector3, delta: float) -> void:
 	var diff_between_right_edges: float = target_right_edge - pushbox_right_edge
 	if diff_between_right_edges > 0:
 		global_position.x += diff_between_right_edges
-		print("pushbox: right")
 		return
 	
 	# Handle speedup zone: Apply push_ratio if the target is in a speedup zone
@@ -104,7 +101,6 @@ func _handle_right(tpos: Vector3, cpos: Vector3, delta: float) -> void:
 		var tspeed: float = target.velocity.length()
 		var target_unit_direction: Vector3 = target.velocity.normalized()
 		global_position.x += target_unit_direction.x * tspeed * delta * push_ratio
-		print("speedup: right")
 
 
 func _handle_up(tpos: Vector3, cpos: Vector3, delta: float) -> void:
@@ -114,7 +110,6 @@ func _handle_up(tpos: Vector3, cpos: Vector3, delta: float) -> void:
 	var diff_between_top_edges: float = target_top_edge - pushbox_top_edge
 	if diff_between_top_edges < 0:
 		global_position.z += diff_between_top_edges
-		print("pushbox: up")
 		return
 	
 	# Handle speedup zone: Apply push_ratio if the target is in a speedup zone
@@ -125,7 +120,6 @@ func _handle_up(tpos: Vector3, cpos: Vector3, delta: float) -> void:
 		var tspeed: float = target.velocity.length()
 		var target_unit_direction: Vector3 = target.velocity.normalized()
 		global_position.z += target_unit_direction.z * tspeed * delta * push_ratio
-		print("speedup: up")
 
 
 func _handle_down(tpos: Vector3, cpos: Vector3, delta: float) -> void:
@@ -135,7 +129,6 @@ func _handle_down(tpos: Vector3, cpos: Vector3, delta: float) -> void:
 	var diff_between_bot_edges: float = target_bot_edge - pushbox_bot_edge
 	if diff_between_bot_edges > 0:
 		global_position.z += diff_between_bot_edges
-		print("pushbox: down")
 		return
 	
 	# Handle speedup zone: Apply push_ratio if the target is in a speedup zone
@@ -146,7 +139,6 @@ func _handle_down(tpos: Vector3, cpos: Vector3, delta: float) -> void:
 		var tspeed: float = target.velocity.length()
 		var target_unit_direction: Vector3 = target.velocity.normalized()
 		global_position.z += target_unit_direction.z * tspeed * delta * push_ratio
-		print("speedup: down")
 
 
 func _is_in_speedup_zones(tpos: Vector3, cpos: Vector3) -> Dictionary:

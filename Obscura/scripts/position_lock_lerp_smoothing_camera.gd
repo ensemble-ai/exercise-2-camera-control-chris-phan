@@ -2,7 +2,7 @@ class_name PositionLockLerpSmoothingCamera
 extends CameraControllerBase
 
 # follow_speed and catcup_speed aren't in the same units as the target's speed
-#
+# since they're used for the lerp function which requires a weight between 0 and 1
 @export var follow_speed: float = 3.0
 @export var catchup_speed: float = 7.0
 @export var leash_distance: float = 10.0
@@ -36,45 +36,15 @@ func _physics_process(delta: float) -> void:
 	
 	var tpos: Vector3 = target.global_position
 	var cpos: Vector3 = global_position
-	
 	var unit_direction: Vector3 = (tpos - cpos).normalized()
-	#print("tpos: ", tpos, " cpos: ", cpos)
-	#print("current speed: ", _current_speed)
-	#print("unit direction: ", unit_direction)
-
-	#global_position.x += unit_direction.x * _current_speed * delta
-	#global_position.z += unit_direction.z * _current_speed * delta
-	
-	var camera_xz: Vector2 = Vector2(global_position.x, global_position.z)
-	var target_xz: Vector2 = Vector2(tpos.x, tpos.z)
-	#var move_to: Vector2 = camera_xz.move_toward(target_xz, _current_speed * delta)
-	var move_to: Vector3 = cpos.move_toward(tpos, _current_speed * delta)
-	#global_position.x = move_to.x
-	#global_position.z = move_to.z
-	
-	#print("_lerp_to_x: ", lerpf(cpos.x, tpos.x, _current_speed * delta), " _lerp_to_z: ", lerpf(cpos.z, tpos.z, _current_speed * delta))
-	print("cpos: ", cpos, " tpos: ", tpos)
 	
 	global_position.x = lerpf(cpos.x, tpos.x, _current_speed * delta)
 	global_position.z = lerpf(cpos.z, tpos.z, _current_speed * delta)
 	
 	var distance: float = Vector2(tpos.x - cpos.x, tpos.z - cpos.z).length()
-	#if distance <= _current_speed * delta:
-		## Snap camera to player if their distances are close enough
-		#global_position.x = tpos.x
-		#global_position.z = tpos.z
-		#
-		## Once camera reaches the target, set current_speed to follow_speed
-		#_current_speed = follow_speed
-		##print("snap")
-	#el
 	if distance > leash_distance:
 		global_position.x += unit_direction.x * (distance - leash_distance)
 		global_position.z += unit_direction.z * (distance - leash_distance)
-		#print("distance: ", distance)
-		#print("x: ", unit_direction.x * (distance - leash_distance))
-		#print("z: ", unit_direction.z * (distance - leash_distance))
-		print("leashed ", global_position)
 
 
 func draw_logic() ->  void:
