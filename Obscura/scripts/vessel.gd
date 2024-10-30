@@ -11,6 +11,7 @@ const WIDTH:float = RADIUS * 2.0
 const BASE_SPEED = 50
 const HYPER_SPEED = 300
 
+
 func _physics_process(_delta):
 	
 	var speed = BASE_SPEED
@@ -38,13 +39,23 @@ func _physics_process(_delta):
 	#var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	if direction:
+		#print("\tvessel: direction: ", direction)
 		velocity.x = direction.x * speed
 		velocity.z = direction.z * speed
 	else:
+		#print("\tvessel: before: velocity: ", velocity)
 		velocity.x = move_toward(velocity.x, 0, speed)
 		velocity.z = move_toward(velocity.z, 0, speed)
-
+		#print("\tvessel: after velocity: ", velocity)
+	
 	move_and_slide()
+	print("vessel moved: ", global_position)
+	
+	if is_zero_approx(input_dir.length()):
+		SignalBus.vessel_stopped.emit()
+	else:
+		SignalBus.vessel_moved.emit(direction)
+
 
 func _play(player:AudioStreamPlayer2D) -> void:
 	if !player.playing:
