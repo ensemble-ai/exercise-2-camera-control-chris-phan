@@ -4,7 +4,6 @@ extends CameraControllerBase
 @export var lead_speed: float = target.BASE_SPEED * 1.25
 @export var catchup_delay_duration: float = 0.3
 @export var catchup_speed: float = target.BASE_SPEED * 0.8
-
 @export var leash_distance: float = 10.0
 
 const _CROSS_WIDTH: float = 5.0
@@ -36,9 +35,8 @@ func _physics_process(delta: float) -> void:
 	if !current:
 		return
 	
-	var tpos: Vector3 = target.global_position
 	var cpos: Vector3 = global_position
-
+	
 	global_position.x = move_toward(cpos.x, _move_toward.x, _current_speed * delta)
 	global_position.z = move_toward(cpos.z, _move_toward.z, _current_speed * delta)
 
@@ -82,17 +80,19 @@ func _handle_stopped_moving() -> void:
 	_current_speed = 0
 	_unit_direction = Vector3(0.0, 0.0, 0.0)
 	
+	# Move the camera towards the target
 	var tpos: Vector3 = target.global_position
 	_move_toward = Vector3(tpos.x, global_position.y, tpos.z)
 	
 	if _timer == null:
+		# Create and start a timer
 		_timer = Timer.new()
 		add_child(_timer)
 		_timer.one_shot = true
 		_timer.start(catchup_delay_duration)
 	elif _timer.is_stopped():
+		# Set the speed of the camera to be non-zero
 		_current_speed = catchup_speed
-		_timer.stop()
 		if _timer.get_parent() == self:
 			remove_child(_timer)
 
@@ -104,11 +104,15 @@ func _handle_moved(input_vector: Vector3) -> void:
 	var tpos: Vector3 = target.global_position
 	var cpos: Vector3 = global_position
 	
+	# The camera moves towards the point that is leash_distance away from the
+	# target and in the direction that the target is currently moving
 	_move_toward.x = tpos.x + (_unit_direction.x * leash_distance)
 	_move_toward.y = cpos.y
 	_move_toward.z = tpos.z + (_unit_direction.z * leash_distance)
 	
 	if _timer != null:
+		# Ignore the timer if there was one running; prioritize moving
+		# the camera forward rather than moving it back to the target
 		_timer.stop()
 		if _timer.get_parent() == self:
 			remove_child(_timer)

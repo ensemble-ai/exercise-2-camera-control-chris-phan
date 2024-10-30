@@ -28,8 +28,8 @@ func _physics_process(delta: float) -> void:
 	global_position.x += autoscroll_speed.x * delta
 	global_position.z += autoscroll_speed.z * delta
 	
-	# Give the player the same velocity as the camera
-	# If the player isn't moving, they'll stay in the same position on the screen
+	# Give the target the same velocity as the camera
+	# If the target isn't moving, they'll stay in the same position on the screen
 	target.global_position.x += autoscroll_speed.x * delta
 	target.global_position.z += autoscroll_speed.z * delta
 	

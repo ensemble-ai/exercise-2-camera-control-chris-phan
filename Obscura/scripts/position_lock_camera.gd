@@ -17,6 +17,7 @@ func _process(delta: float) -> void:
 	if draw_camera_logic:
 		draw_logic()
 	
+	# Lock onto the target
 	global_position.x = target.global_position.x
 	global_position.z = target.global_position.z
 	

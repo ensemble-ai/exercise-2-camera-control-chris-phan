@@ -23,7 +23,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if !current:
 		return
-
+	
 	if draw_camera_logic:
 		draw_logic()
 	
@@ -36,13 +36,17 @@ func _physics_process(delta: float) -> void:
 	
 	var tpos: Vector3 = target.global_position
 	var cpos: Vector3 = global_position
-	var unit_direction: Vector3 = (tpos - cpos).normalized()
 	
+	# Move towards the target's position
 	global_position.x = lerpf(cpos.x, tpos.x, _current_speed * delta)
 	global_position.z = lerpf(cpos.z, tpos.z, _current_speed * delta)
 	
 	var distance: float = Vector2(tpos.x - cpos.x, tpos.z - cpos.z).length()
 	if distance > leash_distance:
+		# Set the camera's position to be leash distance away from the target
+		# and in the opposite direction from the target's movement.
+		# In other words, the camera turns into a pushbox
+		var unit_direction: Vector3 = (tpos - cpos).normalized()
 		global_position.x += unit_direction.x * (distance - leash_distance)
 		global_position.z += unit_direction.z * (distance - leash_distance)
 
