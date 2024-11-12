@@ -63,29 +63,6 @@ ___
 The crosshair is correctly drawn and sticks to the vessel as intended, providing a visual indicator of the target's position. However, the camera does not maintain proper centering around the vessel and crosshair. As a result, the view does not follow the vessel as it moves, which deviates from the assignment's goal for Stage 1, where the camera should always be centered on the vessel. This lack of centering limits the functionality and usability of the controller in tracking the vessel's movement dynamically.
 ### Stage 2 ###
 
-- [ ] Perfect
-- [ ] Great
-- [ ] Good
-- [ ] Satisfactory
-- [x] Unsatisfactory
-
-___
-#### Justification ##### 
-The implementation does not meet the requirements for Stage 2. The camera does not move at a constant speed along the X and Z axes, which is a key feature of this stage. While a frame border box is drawn, it remains stationary rather than following the vessel at the specified autoscroll speed. Consequently, the vessel is able to move outside the box boundaries, which does not align with the instructions that state the player should be contained within a moving frame. Additionally, the camera and box should be scrolling continuously, with the vessel pushed forward upon reaching the left edge of the box, but this behavior is not observed.
-___
-### Stage 3 ###
-
-- [ ] Perfect
-- [ ] Great
-- [ ] Good
-- [ ] Satisfactory
-- [x] Unsatisfactory
-
-___
-#### Justification ##### 
-The crosshair is initially drawn at the center of the screen as specified, but it does not remain centered when the vessel begins to move. The crosshair fails to stay locked to the center of the camera, resulting in it not following the vessel's movement. This behavior does not align with the requirements for Stage 3, where the cross should be position-locked in the center of the camera at all times, with the camera smoothly following the vessel using lerp smoothing. Since the crosshair and camera do not dynamically track the vessel's position, the implementation does not meet the objectives of this stage.
-### Stage 4 ###
-
 - [x] Perfect
 - [ ] Great
 - [ ] Good
@@ -94,19 +71,42 @@ The crosshair is initially drawn at the center of the screen as specified, but i
 
 ___
 #### Justification ##### 
-The camera correctly leads the ball's movement and its direction at a certain lead spead. The camera correctly recenters back to the ball's location after the ball stops moving. There is a small amount of wait time before the recentering happens as specified in the directions. 
+The implementation for Stage 2 is fully aligned with the specified requirements. The camera correctly auto-scrolls at a constant speed along the X and Z axes, maintaining smooth movement. Additionally, when the vessel lags behind and touches the edge of the frame border box, it is accurately pushed forward by the box edge, as outlined in the directions. The frame border box is also drawn correctly, providing clear visual feedback on the boundary limits. Overall, the functionality meets the objectives perfectly for this stage.
+___
+### Stage 3 ###
+
+- [ ] Perfect
+- [x] Great
+- [ ] Good
+- [ ] Satisfactory
+- [ ] Unsatisfactory
+
+___
+#### Justification ##### 
+The implementation for Stage 3 is mostly correct, with a few minor issues. The crosshair is drawn accurately, and the vessel correctly leads the crosshair, with the crosshair following the vessel’s movement as intended. However, the crosshair is not position-locked to the center of the camera, which slightly detracts from the expected behavior for this stage. Despite this minor issue, the primary functionality—where the camera follows the vessel with a slight lag—works well. The implementation is close to perfect but falls short due to the lack of camera-centered positioning for the crosshair.
+### Stage 4 ###
+
+- [ ] Perfect
+- [ ] Great
+- [ ] Good
+- [x] Satisfactory
+- [ ] Unsatisfactory
+
+___
+#### Justification ##### 
+The implementation for Stage 4 meets some aspects of the requirements but falls short in key areas, preventing it from fully realizing the desired functionality. While the crosshair is drawn, it is not position-locked at the center of the camera, which is essential for maintaining consistent visual tracking. The crosshair does lead the vessel's movement as specified, but when the vessel reaches the boundary of its allowed movement, the crosshair re-centers on the vessel, creating an unintended "lagging" effect rather than smoothly leading and maintaining a consistent offset. Additionally, the maximum allowable distance (leash distance) between the vessel and the center of the camera is not functioning correctly, as the camera does not maintain the intended gap before catching up. This results in inconsistent behavior that deviates from the expected dynamic of the camera leading the vessel with a smooth follow-back when it stops. The crosshair should lead without abruptly returning, and the camera should maintain a smooth, delayed follow-up when the vessel stops, which is not fully achieved here
 ___
 ### Stage 5 ###
 
 - [ ] Perfect
 - [ ] Great
 - [ ] Good
-- [ ] Satisfactory
-- [x] Unsatisfactory
+- [x] Satisfactory
+- [ ] Unsatisfactory
 
 ___
 #### Justification ##### 
-No boxes are drawn to indicate the push_zone and speedup_zone. The ball does not seem to be following any pattern, there is no area where the camera does not move as it should, and the general functionality of the stage is missing.
+While the boundaries are correctly drawn, with the vessel constrained within the outer box and the crosshair within the inner box, the core behavior required for Stage 5 is not fully implemented. The camera does not dynamically adjust its speed or direction based on the vessel's position within the push zones, which is essential for this stage. Specifically, the camera should move at a speed determined by the push_ratio when the vessel is near the edge of the outer pushbox, responding differently to movement in the X and Y directions. Since this behavior is missing, the current output does not fully meet the requirements.
 ___
 # Code Style #
 
