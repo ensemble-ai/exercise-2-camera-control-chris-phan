@@ -108,6 +108,7 @@ ___
 #### Justification ##### 
 While the boundaries are correctly drawn, with the vessel constrained within the outer box and the crosshair within the inner box, the core behavior required for Stage 5 is not fully implemented. The camera does not dynamically adjust its speed or direction based on the vessel's position within the push zones, which is essential for this stage. Specifically, the camera should move at a speed determined by the push_ratio when the vessel is near the edge of the outer pushbox, responding differently to movement in the X and Y directions. Since this behavior is missing, the current output does not fully meet the requirements.
 ___
+
 # Code Style #
 
 
@@ -122,19 +123,63 @@ It should look something like this:
 
 Please refer to the first code review template on how to do a permalink.
 
-
-# Code Style #
-
 ### Style Guide Infractions ###
 
-1. **Inconsistent Naming Conventions**  
-   In `SpeedupPushZoneCamera`, variables such as `_pushbox_height`, `_pushbox_width`, `_speedup_height`, and `_speedup_width` use an underscore prefix, which is typically reserved for private fields. While not technically incorrect, following a consistent naming style (e.g., camelCase for local variables and PascalCase for properties) would improve readability.  
-   - [SpeedupPushZoneCamera line 12](https://github.com/ensemble-ai/exercise-2-camera-control-chris-phan/blob/085ed3e16b141ab2f971ec03b6ef1a2cf87abfd5/Obscura/scripts/camera_controllers/speedup_push_zone_camera.gd#L12)
 
-2. **Conditionals Without Braces**  
-   In several instances, conditionals lack braces, which makes the code harder to read and can lead to errors if the code is modified in the future. For instance:
-   ```gd
-   if !current:
-       return
+1. **Excessive Use of Comments for Obvious Code**  
+   Some comments describe what each line is doing, even for straightforward operations. Over-commenting can clutter the code and make it harder to read. Reserve comments for complex logic or unexpected behavior, not for trivial assignments or straightforward conditions.  
+   - **Example**: In `PositionLockLerpSmoothingCamera`, comments on line 47 ("Move towards the target's position") explain something self-evident, which can be inferred directly from the code itself.  
+   - [PositionLockLerpSmoothingCamera line 47](https://github.com/ensemble-ai/exercise-2-camera-control-chris-phan/blob/97d3f7fee93fad4502171c919dfe9ef966225cb1/Obscura/scripts/camera_controllers/position_lock_lerp_smoothing_camera.gd#L46)
 
+2. **Inconsistent Use of Private Helper Functions**  
+   There is inconsistency in breaking down complex logic into private helper functions. For example, `SpeedupPushZoneCamera` has redundant logic across `_handle_left`, `_handle_right`, `_handle_up`, and `_handle_down` for boundary handling and speed adjustment. Moving these to a helper function could significantly improve readability and maintainability.  
+   - **Example**: The boundary check and movement code could be encapsulated in a helper function.  
+   - [SpeedupPushZoneCamera lines 67-140](https://github.com/ensemble-ai/exercise-2-camera-control-chris-phan/blob/97d3f7fee93fad4502171c919dfe9ef966225cb1/Obscura/scripts/camera_controllers/speedup_push_zone_camera.gd#L67)
+
+3. **Redundant Code in Signal Connections**  
+   In `LerpSmoothingTargetFocusCamera` and `PositionLockLerpSmoothingCamera`, the connection of signals is repeated in multiple functions. This could be streamlined into a single function or a utility method, enhancing code reusability.  
+   - **Example**: Signal connections like `SignalBus.vessel_stopped.connect(_handle_stopped_moving)` could be moved to a helper method that can be reused across similar controllers.  
+   - [LerpSmoothingTargetFocusCamera line 20](https://github.com/ensemble-ai/exercise-2-camera-control-chris-phan/blob/97d3f7fee93fad4502171c919dfe9ef966225cb1/Obscura/scripts/camera_controllers/lerp_smoothing_target_focus_camera.gd#L20)
+
+### Style Guide Exemplars ###
+
+1. **Clear Separation of Camera Logic and Movement Logic**  
+   The separation of logic into `_physics_process` for movement and `draw_logic` for rendering in each camera controller improves the structure of the code. This separation makes each function more concise and focused on a single responsibility, which is a good design choice for maintainability and readability.  
+   - **Example**: `AutoScrollCamera` has a dedicated `_physics_process` that only handles movement, keeping movement logic separate from the camera drawing logic.  
+   - [AutoScrollCamera line 24](https://github.com/ensemble-ai/exercise-2-camera-control-chris-phan/blob/97d3f7fee93fad4502171c919dfe9ef966225cb1/Obscura/scripts/auto_scroll_camera.gd#L24)
+
+2. **Consistent Parameterization with Exported Variables**  
+   Each script makes consistent use of `@export` variables, allowing customization through the editor without modifying the script directly. This approach shows consideration for flexibility and configurability in a way that adheres to good coding practices.  
+   - **Example**: In `SpeedupPushZoneCamera`, properties like `push_ratio`, `pushbox_top_left`, and `pushbox_bottom_right` are exposed via `@export`, which makes the camera behavior easily customizable.  
+   - [SpeedupPushZoneCamera line 4](https://github.com/ensemble-ai/exercise-2-camera-control-chris-phan/blob/97d3f7fee93fad4502171c919dfe9ef966225cb1/Obscura/scripts/camera_controllers/speedup_push_zone_camera.gd#L4)
+
+---
+
+# Best Practices #
+
+### Best Practices Infractions ###
+
+1. **Inefficient Use of Signal Handling**  
+   In `LerpSmoothingTargetFocusCamera`, signals are connected to methods that contain minimal logic. This could be refactored by consolidating similar signal handling across controllers, especially if the logic is reused. Reducing these redundant signal handlers would simplify the code and improve efficiency.  
+   - **Example**: Consolidate `_handle_stopped_moving` and `_handle_moved` across similar controllers.  
+   - [LerpSmoothingTargetFocusCamera line 20](https://github.com/ensemble-ai/exercise-2-camera-control-chris-phan/blob/97d3f7fee93fad4502171c919dfe9ef966225cb1/Obscura/scripts/camera_controllers/lerp_smoothing_target_focus_camera.gd#L20)
+
+2. **Limited Use of Helper Functions for Repeated Logic**  
+   Repeated code, especially in the directional handling functions in `SpeedupPushZoneCamera`, should be moved to helper functions to improve modularity. For example, boundary checking and applying `push_ratio` could be made into a generic helper function to eliminate repetition.  
+   - **Example**: Refactor `_handle_left`, `_handle_right`, `_handle_up`, and `_handle_down` into a shared helper function that takes direction as a parameter.  
+   - [SpeedupPushZoneCamera lines 67-140](https://github.com/ensemble-ai/exercise-2-camera-control-chris-phan/blob/97d3f7fee93fad4502171c919dfe9ef966225cb1/Obscura/scripts/camera_controllers/speedup_push_zone_camera.gd#L67)
+
+
+### Best Practices Exemplars ###
+
+1. **Use of Timers for Delayed Actions**  
+   In `LerpSmoothingTargetFocusCamera`, the `Timer` is used effectively to implement `catchup_delay_duration`, which enhances the camera’s responsiveness and smooth movement. This technique showcases a strong understanding of game programming principles.  
+   - [LerpSmoothingTargetFocusCamera line 87](https://github.com/ensemble-ai/exercise-2-camera-control-chris-phan/blob/97d3f7fee93fad4502171c919dfe9ef966225cb1/Obscura/scripts/camera_controllers/lerp_smoothing_target_focus_camera.gd#L87)
+
+2. **Encapsulation of Mesh Drawing into a Separate Function**  
+   The modular approach to drawing logic (such as drawing boxes or crosshairs) in a separate `draw_logic` function across different scripts is a best practice for modularity and reuse. It reduces clutter in the main logic and improves readability.  
+
+3. **Effective Use of Lerp for Smooth Camera Movement**  
+   In `PositionLockLerpSmoothingCamera`, `lerpf` is used effectively for smooth transitions between positions. This technique is beneficial for creating smooth camera motion without abrupt changes, demonstrating thoughtful application of linear interpolation.  
+   - [PositionLockLerpSmoothingCamera line 41](https://github.com/ensemble-ai/exercise-2-camera-control-chris-phan/blob/97d3f7fee93fad4502171c919dfe9ef966225cb1/Obscura/scripts/camera_controllers/position_lock_lerp_smoothing_camera.gd#L41)
 
