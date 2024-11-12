@@ -123,46 +123,18 @@ It should look something like this:
 Please refer to the first code review template on how to do a permalink.
 
 
-#### Style Guide Infractions ####
+# Code Style #
 
-Student did a good job following most of the GD style guide, there were only a few rules that were broken.
+### Style Guide Infractions ###
 
-This line is [too long and should use double indents and be continued on multiple lines](https://github.com/ensemble-ai/exercise-2-camera-control-corypham/blob/ccc36d8c3ec939a53507d8380247534026eaa506/Obscura/scripts/camera_controllers/lock_lerp.gd#L30)
+1. **Inconsistent Naming Conventions**  
+   In `SpeedupPushZoneCamera`, variables such as `_pushbox_height`, `_pushbox_width`, `_speedup_height`, and `_speedup_width` use an underscore prefix, which is typically reserved for private fields. While not technically incorrect, following a consistent naming style (e.g., camelCase for local variables and PascalCase for properties) would improve readability.  
+   - [SpeedupPushZoneCamera line 12](https://github.com/ensemble-ai/exercise-2-camera-control-chris-phan/blob/085ed3e16b141ab2f971ec03b6ef1a2cf87abfd5/Obscura/scripts/camera_controllers/speedup_push_zone_camera.gd#L12)
 
-The 4 variables starting on this line are all private variables used only within the class for calculating the logic, [all private variables should precede with an underscore](https://github.com/ensemble-ai/exercise-2-camera-control-corypham/blob/ccc36d8c3ec939a53507d8380247534026eaa506/Obscura/scripts/camera_controllers/target_focus.gd#L9C1-L12C83) according to GD naming conventions
-
-[Functions should be wrapped with 2 empty lines](https://github.com/ensemble-ai/exercise-2-camera-control-corypham/blob/ccc36d8c3ec939a53507d8380247534026eaa506/Obscura/scripts/camera_controllers/target_focus.gd#L72)
-
-#### Style Guide Exemplars ####
-
-Did a good job following [the correct order of the variables](https://github.com/ensemble-ai/exercise-2-camera-control-corypham/blob/ccc36d8c3ec939a53507d8380247534026eaa506/Obscura/scripts/camera_controllers/target_focus.gd#L4C1-L12C83)
-
-Good job using correct formatting for [one liner if/else statement](https://github.com/ensemble-ai/exercise-2-camera-control-corypham/blob/ccc36d8c3ec939a53507d8380247534026eaa506/Obscura/scripts/camera_controllers/push_zone.gd#L60)
-___
-#### Put style guide infractures ####
-
-___
-
-# Best Practices #
-
-### Description ###
-
-If the student has followed best practices (Unity coding conventions from the StyleGuides document) then feel free to point at these code segments as examplars. 
-
-If the student has breached the best practices and has done something that should be noted, please add the infraction.
+2. **Conditionals Without Braces**  
+   In several instances, conditionals lack braces, which makes the code harder to read and can lead to errors if the code is modified in the future. For instance:
+   ```gd
+   if !current:
+       return
 
 
-This should be similar to the Code Style justification.
-
-#### Best Practices Infractions ####
-
-[Using variables for constants like 2.5](https://github.com/ensemble-ai/exercise-2-camera-control-corypham/blob/ccc36d8c3ec939a53507d8380247534026eaa506/Obscura/scripts/camera_controllers/lock_lerp.gd#L59) will help someone reading the code understand the value, and will make it easier in case the value needs to be tweaked.
-
-[Remove any unused commented lines of code](https://github.com/ensemble-ai/exercise-2-camera-control-corypham/blob/ccc36d8c3ec939a53507d8380247534026eaa506/Obscura/scripts/camera_controllers/position_lock.gd#L12)
-
-There should be [no export variables for the position lock stage](https://github.com/ensemble-ai/exercise-2-camera-control-corypham/blob/ccc36d8c3ec939a53507d8380247534026eaa506/Obscura/scripts/camera_controllers/position_lock.gd#L4) as specified in the instructions
-
-
-#### Best Practices Exemplars ####
-
-The student did a great job [commenting all significant chunks of code with an explanation of what those lines of code are doing.](https://github.com/ensemble-ai/exercise-2-camera-control-corypham/blob/ccc36d8c3ec939a53507d8380247534026eaa506/Obscura/scripts/camera_controllers/target_focus.gd#L42) This really helped understand the flow of the logic. The permalink is one example of where they did this, but the student was very consistent with commenting throughout all their files.
